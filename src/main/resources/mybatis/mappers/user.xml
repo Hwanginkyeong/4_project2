@@ -2,27 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="user">
 
-	<!-- ResultMap -->
-	<!--<resultMap id="RMUserVo" type="UserVo">
-		<result column="user_no" property="userNo" />
-		<result column="user_name" property="userName" />
-		<result column="nickname" property="nickname" />
-		<result column="email" property="email" />
-		<result column="password" property="password" />
-		<result column="user_profile" property="userProfile" />
-		<result column="join_date" property="joinDate" />
-	</resultMap>  -->	
-
-	<!-- 로그인시 authUser 데이터 -->
+	<!-- 
 	<select id="selectUser" parameterType="UserVo" resultType="UserVo">
 	 	<![CDATA[
-			SELECT  user_no userNo,
-        			user_name userName,
-        			nickname,
-        			email
-			FROM users
-			WHERE email = #{email}
-			AND password = #{password}
+			
+		]]>
+	</select> -->
+	
+
+	<select id="selectUser" parameterType="UserVo" resultType="UserVo">
+	 	<![CDATA[
+	 	select  r.book_no,
+		        r.review_no,
+		        r.style_no,
+		        r.emo_name,
+		        b.book_title,
+		        r.likecnt,
+		        r.nickname
+		from   (select r.review_no,
+		                ru.likecnt,
+		                r.style_no,
+		                r.emo_name,
+		                r.book_no,
+		                r.nickname
+		        from   (select  r.review_no,
+		                        s.style_no,
+		                        e.emo_no,
+		                        e.emo_name,
+		                        r.book_no,
+		                        u.nickname
+		                from    review r, style s, emotion e, users u
+		                where   e.emo_no = s.emo_no
+		                and     r.style_no = s.style_no
+		                and     r.user_no = u.user_no) r,(select review_no, count(review_no) likecnt
+		                                                    from review_user
+		                                                    group by review_no) ru
+		        where r.review_no = ru.review_no) r, books b
+		where   r.book_no = b.book_no 
+		and     b.book_no = 9791189327156;
+			 	
+			
 		]]>
 	</select>
 

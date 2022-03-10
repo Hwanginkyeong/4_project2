@@ -130,6 +130,7 @@ font-family: 'Nanum Myeongjo';
 
 
 #review_box p {
+	width: 70%;
     display: table-cell;
     vertical-align: middle;
     text-align:center;
